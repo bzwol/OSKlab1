@@ -9,9 +9,30 @@ namespace WindowsFormsApp1
 	public class DigitalClock : Control
 	{
 		private Timer _timer;
-		private Brush bBrush = Brushes.Black;
-		private Color f1c = Color.Black;
-		private Color f2c = Color.LightGray;
+		private Color _bck = SystemColors.Control;
+		public Color bck
+        {
+			get => _bck;
+            set { _bck = value; Invalidate(); }
+        }
+		private Color _f1c = SystemColors.ButtonFace;
+		public Color f1c
+		{
+			get => _f1c;
+			set { _f1c = value; Invalidate(); }
+		}
+		private Color _f2c = Color.White;
+		public Color f2c
+		{
+			get => _f2c;
+			set { _f2c = value; Invalidate(); }
+		}
+		private Color _dtc = Color.Black;
+		public Color dtc
+		{
+			get => _dtc;
+			set { _dtc = value; Invalidate(); }
+		}
 
 		private Point[] segmentPoints =
 		{

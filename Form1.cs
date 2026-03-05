@@ -17,8 +17,23 @@ namespace WindowsFormsApp1
             InitializeComponent();
             this.DoubleBuffered = true;
             this.ClientSize = new Size(600, 300);
+
             this.analogClock1.Visible = true;
             this.digitalClock1.Visible = false;
+
+            this.BackColor = motive_colors[0];
+            foreach (var btn in this.Controls.OfType<Button>()) btn.BackColor = motive_colors[0];
+            this.label_disp.BackColor = motive_colors[2];
+
+            this.digitalClock1.bck = motive_colors[1];
+            this.digitalClock1.f1c = motive_colors[3];
+            this.digitalClock1.f2c = motive_colors[1];
+            this.digitalClock1.dtc = motive_colors[3];
+
+            this.analogClock1.bck = motive_colors[2];
+            this.analogClock1.f1c = motive_colors[3];
+            this.analogClock1.f2c = motive_colors[3];
+            this.analogClock1.dtc = motive_colors[3];
         }
 
         private void Button_Digit_Click(object sender, EventArgs e)
@@ -55,7 +70,7 @@ namespace WindowsFormsApp1
         private void Button_Comma_Click(object sender, EventArgs e) {
             if (!label_disp.Text.Contains(","))
             {
-                label_disp.Text += ",";
+                label_disp.Text += "0,";
             }
         }
         private string Convert_To_RPN(object sender, EventArgs e)
@@ -72,7 +87,7 @@ namespace WindowsFormsApp1
                 {
                     if (c == ',')
                     {
-                        output += '.';
+                        output += ',';
                     } else
                     output += c;
                 }
@@ -103,7 +118,7 @@ namespace WindowsFormsApp1
             for (int i = 0; i < rpn.Length; i++)
             {
                 char c = rpn[i];
-                if (char.IsDigit(c) || c == '.')
+                if (char.IsDigit(c) || c == ',')
                 {
                     number += c;
                 }
@@ -111,6 +126,7 @@ namespace WindowsFormsApp1
                    {
                     if (!string.IsNullOrEmpty(number))
                     {
+                        // if (number.Contains(',')) number += "f";
                         stack.Push(float.Parse(number));
                         number = null;
                     }
@@ -176,6 +192,50 @@ namespace WindowsFormsApp1
         private void zamknijToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void domyślnyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            motive_colors[0] = SystemColors.Control;
+            motive_colors[1] = Color.LightGray;
+            motive_colors[2] = Color.White;
+            motive_colors[3] = Color.Black;
+            changeColors();
+        }
+
+        private void ciemnyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            motive_colors[0] = SystemColors.ControlDark;
+            motive_colors[1] = Color.Gray;
+            motive_colors[2] = Color.LightGray;
+            motive_colors[3] = Color.White;
+            changeColors();
+        }
+
+        private void zielonyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            motive_colors[0] = Color.DarkGreen;
+            motive_colors[1] = Color.ForestGreen;
+            motive_colors[2] = Color.GreenYellow;
+            motive_colors[3] = Color.LawnGreen;
+            changeColors();
+        }
+
+        void changeColors()
+        {
+            this.BackColor = motive_colors[0];
+            foreach (var btn in this.Controls.OfType<Button>()) btn.BackColor = motive_colors[0];
+            this.label_disp.BackColor = motive_colors[2];
+
+            this.digitalClock1.bck = motive_colors[1];
+            this.digitalClock1.f1c = motive_colors[3];
+            this.digitalClock1.f2c = motive_colors[1];
+            this.digitalClock1.dtc = motive_colors[3];
+
+            this.analogClock1.bck = motive_colors[2];
+            this.analogClock1.f1c = motive_colors[3];
+            this.analogClock1.f2c = motive_colors[3];
+            this.analogClock1.dtc = motive_colors[3];
         }
     }
 }

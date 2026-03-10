@@ -10,36 +10,24 @@ namespace WindowsFormsApp1
     {
         private Timer _timer;
 
-        private Color _bck = SystemColors.Control;
-        public Color bck
+        private Color _main_color = Color.FromArgb(220, 220, 220);
+        public Color main_color
         {
-            get => _bck;
-            set { _bck = value; Invalidate(); }
-        }
-        private Color _f1c = SystemColors.ButtonFace;
-        public Color f1c
-        {
-            get => _f1c;
-            set { _f1c = value; Invalidate(); }
-        }
-        private Color _f2c = Color.White;
-        public Color f2c
-        {
-            get => _f2c;
-            set { _f2c = value; Invalidate(); }
-        }
-        private Color _dtc = Color.Black;
-        public Color dtc
-        {
-            get => _dtc;
-            set { _dtc = value; Invalidate(); }
+            get => _main_color;
+            set { _main_color = value; Invalidate(); }
         }
 
+        private Color _detail_color = Color.Black;
+        public Color detail_color
+        {
+            get => _detail_color;
+            set { _detail_color = value; Invalidate(); }
+        }
 
         public AnalogClock()
         {
             this.DoubleBuffered = true;
-            this.Size = new Size(300, 300);
+            this.Size = new Size(250, 250);
 
             _timer = new Timer();
             _timer.Interval = 1000;
@@ -64,10 +52,10 @@ namespace WindowsFormsApp1
             float hours = now.Hour % 12 + minutes / 60f;
 
             // Draw face of clock
-            g.FillEllipse(new SolidBrush(_bck), cx - radius, cy - radius, radius * 2, radius * 2);
+            g.FillEllipse(new SolidBrush(_main_color), cx - radius, cy - radius, radius * 2, radius * 2);
 
             // Draw markers
-            float inner_coeff = 0.93f;
+            float inner_coeff;
             float outer_coeff = 0.98f;
             float angle_coeff = (float)Math.PI / 30f;
 
@@ -75,11 +63,11 @@ namespace WindowsFormsApp1
             {
                 float outerx = cx + radius * (float)Math.Sin(i * angle_coeff) * outer_coeff;
                 float outery = cy - radius * (float)Math.Cos(i * angle_coeff) * outer_coeff;
-                if (i % 5 == 0) inner_coeff = 0.9f; else inner_coeff = 0.93f;
+                if (i % 5 == 0) inner_coeff = 0.88f; else inner_coeff = 0.93f;
                 float innerx = cx + radius * (float)Math.Sin(i * angle_coeff) * inner_coeff;
                 float innery = cy - radius * (float)Math.Cos(i * angle_coeff) * inner_coeff;
 
-                g.DrawLine(new Pen(_f1c), (float)innerx, (float)innery, (float)outerx, (float)outery);
+                g.DrawLine(new Pen(_detail_color), (float)innerx, (float)innery, (float)outerx, (float)outery);
             }
 
             // Draw hands
@@ -87,9 +75,9 @@ namespace WindowsFormsApp1
             float minutes_angle = minutes * angle_coeff + seconds_angle / 60 ;
             float hours_angle = hours * (float)Math.PI / 6 + minutes_angle / 60;
 
-            DrawHand(seconds_angle, radius * 0.85f, 1,  _f2c);
-            DrawHand(minutes_angle, radius * 0.8f, 2, _f2c);
-            DrawHand(hours_angle, radius * 0.7f, 3, _f2c);
+            DrawHand(seconds_angle, radius * 0.85f, 1,  _detail_color);
+            DrawHand(minutes_angle, radius * 0.8f, 2, _detail_color);
+            DrawHand(hours_angle, radius * 0.7f, 3, _detail_color);
 
             void DrawHand(float angle, float length, int width, Color color)
             {

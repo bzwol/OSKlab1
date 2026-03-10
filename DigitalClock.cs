@@ -9,29 +9,19 @@ namespace WindowsFormsApp1
 	public class DigitalClock : Control
 	{
 		private Timer _timer;
-		private Color _bck = SystemColors.Control;
-		public Color bck
-        {
-			get => _bck;
-            set { _bck = value; Invalidate(); }
-        }
-		private Color _f1c = SystemColors.ButtonFace;
-		public Color f1c
+
+		private Color _main_color = Color.FromArgb(220,220,220);
+		public Color main_color
 		{
-			get => _f1c;
-			set { _f1c = value; Invalidate(); }
+			get => _main_color;
+			set { _main_color = value; Invalidate(); }
 		}
-		private Color _f2c = Color.White;
-		public Color f2c
+
+		private Color _detail_color = Color.Black;
+		public Color detail_color
 		{
-			get => _f2c;
-			set { _f2c = value; Invalidate(); }
-		}
-		private Color _dtc = Color.Black;
-		public Color dtc
-		{
-			get => _dtc;
-			set { _dtc = value; Invalidate(); }
+			get => _detail_color;
+			set { _detail_color = value; Invalidate(); }
 		}
 
 		private Point[] segmentPoints =
@@ -61,7 +51,7 @@ namespace WindowsFormsApp1
 		public DigitalClock()
 		{
 			this.DoubleBuffered = true;
-			this.Size = new Size(500, 500);
+			this.Size = new Size(300, 300);
 
 			_timer = new Timer();
 			_timer.Interval = 1000;
@@ -121,13 +111,13 @@ namespace WindowsFormsApp1
 			{
 				g.RotateTransform(90);
 			}
-			using (Brush b = new SolidBrush(on ? f1c : f2c)) g.FillPolygon(b, segmentPoints);
+			using (Brush b = new SolidBrush(on ? _detail_color : _main_color)) g.FillPolygon(b, segmentPoints);
 
 			g.Restore(state);
 		}
 		void DrawColon(Graphics g, Point loc, int seconds)
 		{
-			using (Brush b = new SolidBrush((seconds % 2 == 0) ? f1c : f2c))
+			using (Brush b = new SolidBrush((seconds % 2 == 0) ? _detail_color : _main_color))
 			{
 				g.FillEllipse(b, loc.X, loc.Y + 25, 10, 10);
 				g.FillEllipse(b, loc.X, loc.Y + 50, 10, 10);

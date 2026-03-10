@@ -16,24 +16,10 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
             this.DoubleBuffered = true;
-            this.ClientSize = new Size(600, 300);
-
             this.analogClock1.Visible = true;
             this.digitalClock1.Visible = false;
+            changeColors();
 
-            this.BackColor = motive_colors[0];
-            foreach (var btn in this.Controls.OfType<Button>()) btn.BackColor = motive_colors[0];
-            this.label_disp.BackColor = motive_colors[2];
-
-            this.digitalClock1.bck = motive_colors[1];
-            this.digitalClock1.f1c = motive_colors[3];
-            this.digitalClock1.f2c = motive_colors[1];
-            this.digitalClock1.dtc = motive_colors[3];
-
-            this.analogClock1.bck = motive_colors[2];
-            this.analogClock1.f1c = motive_colors[3];
-            this.analogClock1.f2c = motive_colors[3];
-            this.analogClock1.dtc = motive_colors[3];
         }
 
         private void Button_Digit_Click(object sender, EventArgs e)
@@ -196,19 +182,17 @@ namespace WindowsFormsApp1
 
         private void domyślnyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            motive_colors[0] = SystemColors.Control;
-            motive_colors[1] = Color.LightGray;
-            motive_colors[2] = Color.White;
-            motive_colors[3] = Color.Black;
+            motive_colors[0] = Color.White;
+            motive_colors[1] = Color.FromArgb(240, 240, 240);
+            motive_colors[2] = Color.Black;
             changeColors();
         }
 
         private void ciemnyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            motive_colors[0] = SystemColors.ControlDark;
-            motive_colors[1] = Color.Gray;
-            motive_colors[2] = Color.LightGray;
-            motive_colors[3] = Color.White;
+            motive_colors[0] = Color.Black;
+            motive_colors[1] = Color.FromArgb(25,25,25);
+            motive_colors[2] = Color.DodgerBlue;
             changeColors();
         }
 
@@ -217,25 +201,52 @@ namespace WindowsFormsApp1
             motive_colors[0] = Color.DarkGreen;
             motive_colors[1] = Color.ForestGreen;
             motive_colors[2] = Color.GreenYellow;
-            motive_colors[3] = Color.LawnGreen;
             changeColors();
         }
 
         void changeColors()
         {
             this.BackColor = motive_colors[0];
-            foreach (var btn in this.Controls.OfType<Button>()) btn.BackColor = motive_colors[0];
-            this.label_disp.BackColor = motive_colors[2];
+            foreach (var btn in this.Controls.OfType<Button>()) 
+            {
+                btn.BackColor = motive_colors[1];
+                btn.ForeColor = motive_colors[2];
+            }
+            
+            this.label_disp.BackColor = motive_colors[1];
+            this.label_disp.ForeColor = motive_colors[2];
 
-            this.digitalClock1.bck = motive_colors[1];
-            this.digitalClock1.f1c = motive_colors[3];
-            this.digitalClock1.f2c = motive_colors[1];
-            this.digitalClock1.dtc = motive_colors[3];
+            this.digitalClock1.main_color = motive_colors[1];
+            this.digitalClock1.detail_color = motive_colors[2];
 
-            this.analogClock1.bck = motive_colors[2];
-            this.analogClock1.f1c = motive_colors[3];
-            this.analogClock1.f2c = motive_colors[3];
-            this.analogClock1.dtc = motive_colors[3];
+            this.analogClock1.main_color = motive_colors[1];
+            this.analogClock1.detail_color = motive_colors[2];
+
+            this.menuStrip1.BackColor = motive_colors[0];
+            this.menuStrip1.ForeColor = motive_colors[2];
+
+            foreach(ToolStripMenuItem item in menuStrip1.Items)
+            {
+                item.BackColor = motive_colors[0];
+                item.ForeColor = motive_colors[2];
+                changeMenuItemColors(item);
+            }
         }
+
+        void changeMenuItemColors(ToolStripMenuItem parent)
+        {
+            foreach (ToolStripMenuItem item in parent.DropDownItems)
+            {
+                item.BackColor = motive_colors[0];
+                item.ForeColor = motive_colors[2];
+
+
+                if (item.DropDownItems.Count > 0)
+                {
+                    changeMenuItemColors(item);
+                }
+            }
+        }
+
     }
 }

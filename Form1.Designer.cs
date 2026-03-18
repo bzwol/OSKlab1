@@ -14,6 +14,7 @@ namespace WindowsFormsApp1
               Color.FromArgb(240,240,240),
               Color.Black
         };
+        public bool valid_RPN = true;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -65,6 +66,8 @@ namespace WindowsFormsApp1
             this.stylZegaruToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.analogowyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cyfrowyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button_lbracket = new System.Windows.Forms.Button();
+            this.button_rbracket = new System.Windows.Forms.Button();
             this.analogClock1 = new WindowsFormsApp1.AnalogClock();
             this.digitalClock1 = new WindowsFormsApp1.DigitalClock();
             this.menuStrip1.SuspendLayout();
@@ -243,9 +246,9 @@ namespace WindowsFormsApp1
             this.button_add.BackColor = System.Drawing.Color.White;
             this.button_add.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button_add.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button_add.Location = new System.Drawing.Point(240, 501);
+            this.button_add.Location = new System.Drawing.Point(240, 516);
             this.button_add.Name = "button_add";
-            this.button_add.Size = new System.Drawing.Size(70, 50);
+            this.button_add.Size = new System.Drawing.Size(70, 35);
             this.button_add.TabIndex = 12;
             this.button_add.TabStop = false;
             this.button_add.Text = "+";
@@ -257,9 +260,9 @@ namespace WindowsFormsApp1
             this.button_sub.BackColor = System.Drawing.Color.White;
             this.button_sub.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button_sub.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button_sub.Location = new System.Drawing.Point(240, 445);
+            this.button_sub.Location = new System.Drawing.Point(240, 475);
             this.button_sub.Name = "button_sub";
-            this.button_sub.Size = new System.Drawing.Size(70, 50);
+            this.button_sub.Size = new System.Drawing.Size(70, 35);
             this.button_sub.TabIndex = 13;
             this.button_sub.TabStop = false;
             this.button_sub.Text = "-";
@@ -271,9 +274,9 @@ namespace WindowsFormsApp1
             this.button_mul.BackColor = System.Drawing.Color.White;
             this.button_mul.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button_mul.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button_mul.Location = new System.Drawing.Point(240, 389);
+            this.button_mul.Location = new System.Drawing.Point(240, 434);
             this.button_mul.Name = "button_mul";
-            this.button_mul.Size = new System.Drawing.Size(70, 50);
+            this.button_mul.Size = new System.Drawing.Size(70, 35);
             this.button_mul.TabIndex = 14;
             this.button_mul.TabStop = false;
             this.button_mul.Text = "*";
@@ -285,9 +288,9 @@ namespace WindowsFormsApp1
             this.button_div.BackColor = System.Drawing.Color.White;
             this.button_div.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button_div.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button_div.Location = new System.Drawing.Point(240, 333);
+            this.button_div.Location = new System.Drawing.Point(240, 393);
             this.button_div.Name = "button_div";
-            this.button_div.Size = new System.Drawing.Size(70, 50);
+            this.button_div.Size = new System.Drawing.Size(70, 35);
             this.button_div.TabIndex = 15;
             this.button_div.TabStop = false;
             this.button_div.Text = "/";
@@ -413,6 +416,30 @@ namespace WindowsFormsApp1
             this.cyfrowyToolStripMenuItem.Text = "Cyfrowy";
             this.cyfrowyToolStripMenuItem.Click += new System.EventHandler(this.menu_clock_Click);
             // 
+            // button_lbracket
+            // 
+            this.button_lbracket.BackColor = System.Drawing.Color.White;
+            this.button_lbracket.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button_lbracket.Location = new System.Drawing.Point(240, 333);
+            this.button_lbracket.Name = "button_lbracket";
+            this.button_lbracket.Size = new System.Drawing.Size(35, 54);
+            this.button_lbracket.TabIndex = 22;
+            this.button_lbracket.Text = "(";
+            this.button_lbracket.UseVisualStyleBackColor = false;
+            this.button_lbracket.Click += new System.EventHandler(this.Button_Bracket_Click);
+            // 
+            // button_rbracket
+            // 
+            this.button_rbracket.BackColor = System.Drawing.Color.White;
+            this.button_rbracket.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button_rbracket.Location = new System.Drawing.Point(275, 333);
+            this.button_rbracket.Name = "button_rbracket";
+            this.button_rbracket.Size = new System.Drawing.Size(35, 54);
+            this.button_rbracket.TabIndex = 23;
+            this.button_rbracket.Text = ")";
+            this.button_rbracket.UseVisualStyleBackColor = false;
+            this.button_rbracket.Click += new System.EventHandler(this.Button_Bracket_Click);
+            // 
             // analogClock1
             // 
             this.analogClock1.detail_color = System.Drawing.Color.Black;
@@ -439,6 +466,8 @@ namespace WindowsFormsApp1
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(323, 563);
+            this.Controls.Add(this.button_rbracket);
+            this.Controls.Add(this.button_lbracket);
             this.Controls.Add(this.analogClock1);
             this.Controls.Add(this.digitalClock1);
             this.Controls.Add(this.button_clear);
@@ -505,6 +534,8 @@ namespace WindowsFormsApp1
         private System.Windows.Forms.ToolStripMenuItem zielonyToolStripMenuItem;
         private DigitalClock digitalClock1;
         private AnalogClock analogClock1;
+        private System.Windows.Forms.Button button_lbracket;
+        private System.Windows.Forms.Button button_rbracket;
     }
 }
 

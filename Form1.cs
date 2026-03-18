@@ -39,7 +39,7 @@ namespace WindowsFormsApp1
 
         private void Button_Operator_Click(object sender, EventArgs e)
         {
-            Button button = sender as Button;
+           Button button = sender as Button;
             string operatorSymbol = button.Text;
 
             if(!string.IsNullOrEmpty(label_disp.Text))
@@ -51,6 +51,13 @@ namespace WindowsFormsApp1
                 else
                     label_disp.Text += operatorSymbol;
             }
+        }
+
+        private void Button_Bracket_Click(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            string bracketSymbol = button.Text;
+            label_disp.Text += bracketSymbol;
         }
 
         private void Button_Comma_Click(object sender, EventArgs e) {
@@ -85,6 +92,27 @@ namespace WindowsFormsApp1
                         output += " " + stack.Pop() + " ";
                     }
                     stack.Push(c);
+                }
+                else if (c == '(')
+                {
+                    stack.Push(c);
+                }
+                else if (c == ')')
+                {
+                    while(stack.Peek() != '(')
+                    {
+                        output += " " + stack.Pop() + " ";
+                    }
+                    if(!(stack.Count() > 0))
+                    {
+                        MessageBox.Show("Nie ma zamykającego nawiasu!");
+                        this.valid_RPN = false;
+                    }
+                    else
+                    {
+                        stack.Pop();
+                        this.valid_RPN = true;
+                    }
                 }
             }
 

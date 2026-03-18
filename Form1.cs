@@ -365,9 +365,18 @@ namespace WindowsFormsApp1
                         this.button_mul.PerformClick();
                         return;
                     }
+                case '(':
+                    {
+                        this.button_lbracket.PerformClick();
+                        return;
+                    }
+                case ')':
+                    {
+                        this.button_rbracket.PerformClick();
+                        return;
+                    }
                 default:
                     break;
-                
             }
         }
     }

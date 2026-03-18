@@ -100,7 +100,7 @@ namespace WindowsFormsApp1
             float result = 0;
             Stack<float> stack = new Stack<float>();
             string number = null;
-
+            if (rpn == null) return 0;
             for (int i = 0; i < rpn.Length; i++)
             {
                 char c = rpn[i];
@@ -109,14 +109,13 @@ namespace WindowsFormsApp1
                     number += c;
                 }
                 else
-                   {
+                {
                     if (!string.IsNullOrEmpty(number))
                     {
-                        // if (number.Contains(',')) number += "f";
                         stack.Push(float.Parse(number));
                         number = null;
                     }
-                    if (c == '+' || c == '-' || c == '*' || c == '/')
+                    if ((c == '+' || c == '-' || c == '*' || c == '/') & stack.Count > 0)
                     {
                         float a = stack.Pop();
                         float b = stack.Pop();
@@ -139,7 +138,8 @@ namespace WindowsFormsApp1
                     }
                 }
             }
-            return stack.Pop();
+            if (stack.Count > 0) return stack.Pop();
+            else return float.Parse(number);
         }
 
         private void button_eq_Click(object sender, EventArgs e)
@@ -248,5 +248,99 @@ namespace WindowsFormsApp1
             }
         }
 
+        private void button_KeyPress(object sender, KeyPressEventArgs e)
+        { 
+            switch (e.KeyChar)
+            {
+                case '0':
+                    {
+                        this.button0.PerformClick();
+                        return;
+                    }
+                case '1':
+                    {
+                        this.button1.PerformClick();
+                        return;
+                    }
+                case '2':
+                    {
+                        this.button2.PerformClick();
+                        return;
+                    }
+                case '3':
+                    {
+                        this.button3.PerformClick();
+                        return;
+                    }
+                case '4':
+                    {
+                        this.button4.PerformClick();
+                        return;
+                    }
+                case '5':
+                    {
+                        this.button5.PerformClick();
+                        return;
+                    }
+                case '6':
+                    {
+                        this.button6.PerformClick();
+                        return;
+                    }
+                case '7':
+                    {
+                        this.button7.PerformClick();
+                        return;
+                    }
+                case '8':
+                    {
+                        this.button8.PerformClick();
+                        return;
+                    }
+                case '9':
+                    {
+                        this.button9.PerformClick();
+                        return;
+                    }
+                case ',':
+                    {
+                        this.button_comma.PerformClick();
+                        return;
+                    }
+                case '-':
+                    {
+                        this.button_sub.PerformClick();
+                        return;
+                    }
+                case '/':
+                    {
+                        this.button_div.PerformClick();
+                        return;
+                    }
+                case (char)Keys.Back:
+                    {
+                        if(this.label_disp.Text.Length > 0) this.label_disp.Text = this.label_disp.Text.Remove(this.label_disp.Text.Length - 1);
+                        return;
+                    }
+                case (char)Keys.Enter:
+                    {
+                        this.button_eq.PerformClick();
+                        return;
+                    }
+                case '+':
+                    {
+                        this.button_add.PerformClick();
+                        return;
+                    }
+                case '*':
+                    {
+                        this.button_mul.PerformClick();
+                        return;
+                    }
+                default:
+                    break;
+                
+            }
+        }
     }
 }

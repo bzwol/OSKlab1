@@ -79,6 +79,7 @@ namespace WindowsFormsApp1
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(70, 50);
             this.button1.TabIndex = 0;
+            this.button1.TabStop = false;
             this.button1.Text = "1";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.Button_Digit_Click);
@@ -92,6 +93,7 @@ namespace WindowsFormsApp1
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(70, 50);
             this.button2.TabIndex = 1;
+            this.button2.TabStop = false;
             this.button2.Text = "2";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.Button_Digit_Click);
@@ -105,6 +107,7 @@ namespace WindowsFormsApp1
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(70, 50);
             this.button3.TabIndex = 2;
+            this.button3.TabStop = false;
             this.button3.Text = "3";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.Button_Digit_Click);
@@ -118,6 +121,7 @@ namespace WindowsFormsApp1
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(70, 50);
             this.button4.TabIndex = 3;
+            this.button4.TabStop = false;
             this.button4.Text = "4";
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.Button_Digit_Click);
@@ -131,6 +135,7 @@ namespace WindowsFormsApp1
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(70, 50);
             this.button5.TabIndex = 4;
+            this.button5.TabStop = false;
             this.button5.Text = "5";
             this.button5.UseVisualStyleBackColor = false;
             this.button5.Click += new System.EventHandler(this.Button_Digit_Click);
@@ -144,6 +149,7 @@ namespace WindowsFormsApp1
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(70, 50);
             this.button6.TabIndex = 5;
+            this.button6.TabStop = false;
             this.button6.Text = "6";
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.Button_Digit_Click);
@@ -157,6 +163,7 @@ namespace WindowsFormsApp1
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(70, 50);
             this.button7.TabIndex = 6;
+            this.button7.TabStop = false;
             this.button7.Text = "7";
             this.button7.UseVisualStyleBackColor = false;
             this.button7.Click += new System.EventHandler(this.Button_Digit_Click);
@@ -170,6 +177,7 @@ namespace WindowsFormsApp1
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(70, 50);
             this.button8.TabIndex = 7;
+            this.button8.TabStop = false;
             this.button8.Text = "8";
             this.button8.UseVisualStyleBackColor = false;
             this.button8.Click += new System.EventHandler(this.Button_Digit_Click);
@@ -183,6 +191,7 @@ namespace WindowsFormsApp1
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(70, 50);
             this.button9.TabIndex = 8;
+            this.button9.TabStop = false;
             this.button9.Text = "9";
             this.button9.UseVisualStyleBackColor = false;
             this.button9.Click += new System.EventHandler(this.Button_Digit_Click);
@@ -196,6 +205,7 @@ namespace WindowsFormsApp1
             this.button0.Name = "button0";
             this.button0.Size = new System.Drawing.Size(70, 50);
             this.button0.TabIndex = 9;
+            this.button0.TabStop = false;
             this.button0.Text = "0";
             this.button0.UseVisualStyleBackColor = false;
             this.button0.Click += new System.EventHandler(this.Button_Digit_Click);
@@ -209,6 +219,7 @@ namespace WindowsFormsApp1
             this.button_comma.Name = "button_comma";
             this.button_comma.Size = new System.Drawing.Size(70, 50);
             this.button_comma.TabIndex = 10;
+            this.button_comma.TabStop = false;
             this.button_comma.Text = ",";
             this.button_comma.UseVisualStyleBackColor = false;
             this.button_comma.Click += new System.EventHandler(this.Button_Comma_Click);
@@ -222,6 +233,7 @@ namespace WindowsFormsApp1
             this.button_eq.Name = "button_eq";
             this.button_eq.Size = new System.Drawing.Size(70, 50);
             this.button_eq.TabIndex = 11;
+            this.button_eq.TabStop = false;
             this.button_eq.Text = "=";
             this.button_eq.UseVisualStyleBackColor = false;
             this.button_eq.Click += new System.EventHandler(this.button_eq_Click);
@@ -235,7 +247,8 @@ namespace WindowsFormsApp1
             this.button_add.Name = "button_add";
             this.button_add.Size = new System.Drawing.Size(70, 50);
             this.button_add.TabIndex = 12;
-            this.button_add.Text = "-";
+            this.button_add.TabStop = false;
+            this.button_add.Text = "+";
             this.button_add.UseVisualStyleBackColor = false;
             this.button_add.Click += new System.EventHandler(this.Button_Operator_Click);
             // 
@@ -248,6 +261,7 @@ namespace WindowsFormsApp1
             this.button_sub.Name = "button_sub";
             this.button_sub.Size = new System.Drawing.Size(70, 50);
             this.button_sub.TabIndex = 13;
+            this.button_sub.TabStop = false;
             this.button_sub.Text = "-";
             this.button_sub.UseVisualStyleBackColor = false;
             this.button_sub.Click += new System.EventHandler(this.Button_Operator_Click);
@@ -261,6 +275,7 @@ namespace WindowsFormsApp1
             this.button_mul.Name = "button_mul";
             this.button_mul.Size = new System.Drawing.Size(70, 50);
             this.button_mul.TabIndex = 14;
+            this.button_mul.TabStop = false;
             this.button_mul.Text = "*";
             this.button_mul.UseVisualStyleBackColor = false;
             this.button_mul.Click += new System.EventHandler(this.Button_Operator_Click);
@@ -274,6 +289,7 @@ namespace WindowsFormsApp1
             this.button_div.Name = "button_div";
             this.button_div.Size = new System.Drawing.Size(70, 50);
             this.button_div.TabIndex = 15;
+            this.button_div.TabStop = false;
             this.button_div.Text = "/";
             this.button_div.UseVisualStyleBackColor = false;
             this.button_div.Click += new System.EventHandler(this.Button_Operator_Click);
@@ -299,6 +315,7 @@ namespace WindowsFormsApp1
             this.button_clear.Name = "button_clear";
             this.button_clear.Size = new System.Drawing.Size(70, 50);
             this.button_clear.TabIndex = 17;
+            this.button_clear.TabStop = false;
             this.button_clear.Text = "C";
             this.button_clear.UseVisualStyleBackColor = false;
             this.button_clear.Click += new System.EventHandler(this.button_clear_Click);
@@ -443,9 +460,11 @@ namespace WindowsFormsApp1
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip1);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.button_KeyPress);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

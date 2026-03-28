@@ -69,10 +69,46 @@ namespace WindowsFormsApp1
             label_disp.Text += bracketSymbol;
         }
 
-        private void Button_Comma_Click(object sender, EventArgs e) {
-            if (!label_disp.Text.Contains(","))
+        private void Button_Comma_Click(object sender, EventArgs e)
+        {
+            string currentText = label_disp.Text;
+
+            // Jeśli pole jest puste, zacznij od "0,"
+            if (string.IsNullOrEmpty(currentText))
             {
-                label_disp.Text += "0,";
+                label_disp.Text = "0,";
+                return;
+            }
+
+            // Znajdź ostatni operator lub początek
+            int lastOperatorIndex = -1;
+            for (int i = currentText.Length - 1; i >= 0; i--)
+            {
+                char c = currentText[i];
+                if (c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')')
+                {
+                    lastOperatorIndex = i;
+                    break;
+                }
+            }
+
+            // Pobierz ostatnią liczbę
+            string lastNumber = lastOperatorIndex == -1
+                ? currentText
+                : currentText.Substring(lastOperatorIndex + 1);
+
+            // Sprawdź czy można dodać przecinek
+            if (!lastNumber.Contains(","))
+            {
+                // Jeśli ostatnia liczba jest pusta, dodaj "0,"
+                if (string.IsNullOrEmpty(lastNumber))
+                {
+                    label_disp.Text += "0,";
+                }
+                else
+                {
+                    label_disp.Text += ",";
+                }
             }
         }
         private string Convert_To_RPN(object sender, EventArgs e)
@@ -80,58 +116,97 @@ namespace WindowsFormsApp1
             Label label = sender as Label;
             Stack<char> stack = new Stack<char>();
             string expression = label.Text;
-            string output = null;
+            List<string> output = new List<string>();
+            StringBuilder number = new StringBuilder();
 
             for (int i = 0; i < expression.Length; i++)
             {
                 char c = expression[i];
+
                 if (char.IsDigit(c) || c == ',')
                 {
-                    if (c == ',')
-                    {
-                        output += ',';
-                    } else
-                    output += c;
+                    number.Append(c);
                 }
-                else if (c == '+' || c == '-' || c == '*' || c == '/')
+                else
                 {
-                    output += ' ';
-                    while(stack.Count() > 0 && (stack.Peek() == '*' || stack.Peek() == '/'))
+                    if (number.Length > 0)
                     {
-                        output += " " + stack.Pop() + " ";
+                        output.Add(number.ToString());
+                        number.Clear();
                     }
-                    stack.Push(c);
-                }
-                else if (c == '(')
-                {
-                    stack.Push(c);
-                }
-                else if (c == ')')
-                {
-                    while(stack.Peek() != '(')
+
+                    if (c == '+' || c == '-' || c == '*' || c == '/')
                     {
-                        output += " " + stack.Pop() + " ";
+                        while (stack.Count > 0 && stack.Peek() != '(' &&
+                               GetPrecedence(stack.Peek()) >= GetPrecedence(c))
+                        {
+                            output.Add(stack.Pop().ToString());
+                        }
+                        stack.Push(c);
                     }
-                    if(!(stack.Count() > 0))
+                    else if (c == '(')
                     {
-                        MessageBox.Show("Nie ma zamykającego nawiasu!");
+                        stack.Push(c);
+                    }
+                    else if (c == ')')
+                    {
+                        while (stack.Count > 0 && stack.Peek() != '(')
+                        {
+                            output.Add(stack.Pop().ToString());
+                        }
+                        if (stack.Count == 0)
+                        {
+                            MessageBox.Show("Brakujący nawias otwierający!");
+                            this.valid_RPN = false;
+                            return "";
+                        }
+                        stack.Pop(); // usuń '('
+                    }
+                    else if (c != ' ') // ignoruj spacje
+                    {
+                        MessageBox.Show($"Nieznany znak: {c}");
                         this.valid_RPN = false;
-                    }
-                    else
-                    {
-                        stack.Pop();
-                        this.valid_RPN = true;
+                        return "";
                     }
                 }
             }
 
+            // Dodaj ostatnią liczbę
+            if (number.Length > 0)
+            {
+                output.Add(number.ToString());
+            }
+
+            // Dodaj pozostałe operatory ze stosu
             while (stack.Count > 0)
             {
-                output += " " + stack.Pop();
+                if (stack.Peek() == '(')
+                {
+                    MessageBox.Show("Nadmiarowy nawias otwierający!");
+                    this.valid_RPN = false;
+                    return "";
+                }
+                output.Add(stack.Pop().ToString());
             }
-            return output;
+
+            this.valid_RPN = true;
+            return string.Join(" ", output);
         }
 
+        private int GetPrecedence(char op)
+        {
+            switch (op)
+            {
+                case '+':
+                case '-':
+                    return 1;
+                case '*':
+                case '/':
+                    return 2;
+                default:
+                    return 0;
+            }
+        }
         private float Solve_RPN(string rpn)
         {
             float result = 0;

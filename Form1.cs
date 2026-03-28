@@ -26,21 +26,28 @@ namespace WindowsFormsApp1
         {
             Button button = sender as Button;
             string digit = button.Text;
+            if (newResult)
+            {
+                label_disp.Text = digit;
+                newResult = false;
+                return;
+            }
 
             if (label_disp.Text == "0")
-                {
+            {
                     label_disp.Text = digit;
-                }
-                else
-                {
+            }
+            else
+            {
                     label_disp.Text += digit;
             }
         }
 
         private void Button_Operator_Click(object sender, EventArgs e)
         {
-           Button button = sender as Button;
+            Button button = sender as Button;
             string operatorSymbol = button.Text;
+            newResult = false;
 
             if(!string.IsNullOrEmpty(label_disp.Text))
             {
@@ -57,6 +64,8 @@ namespace WindowsFormsApp1
         {
             Button button = sender as Button;
             string bracketSymbol = button.Text;
+            newResult = false;
+
             label_disp.Text += bracketSymbol;
         }
 
@@ -175,6 +184,7 @@ namespace WindowsFormsApp1
             string rpn = Convert_To_RPN(label_disp, e);
             float result = Solve_RPN(rpn);
             label_disp.Text = result.ToString();
+            newResult = true;
         }
 
         private void button_clear_Click(object sender, EventArgs e)
@@ -350,7 +360,8 @@ namespace WindowsFormsApp1
                         if(this.label_disp.Text.Length > 0) this.label_disp.Text = this.label_disp.Text.Remove(this.label_disp.Text.Length - 1);
                         return;
                     }
-                case (char)Keys.Enter:
+                case '=':
+                case (char)Keys.Enter:        
                     {
                         this.button_eq.PerformClick();
                         return;

@@ -15,6 +15,7 @@ namespace WindowsFormsApp1
               Color.Black
         };
         public bool valid_RPN = true;
+        public bool newResult = false;
 
         /// <summary>
         /// Clean up any resources being used.

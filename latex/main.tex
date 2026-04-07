@@ -3,25 +3,52 @@
 
 \usepackage{graphicx}
 \usepackage{xcolor}
+\usepackage{subcaption}
 
 \usepackage[utf8]{inputenc}
 \usepackage[polish]{babel}
+\usepackage{polski}
 \usepackage[T1]{fontenc}
 
 \usepackage{listings}
 \lstdefinestyle{csharp}{
     language=[Sharp]C,
-    basicstyle=\ttfamily\small,
+    basicstyle=\ttfamily\scriptsize,
     keywordstyle=\color{blue},
     stringstyle=\color{red},
     commentstyle=\color{green!50!black},
     numbers=left,
     numberstyle=\tiny,
-    numbersep=5pt,
+    numbersep=3pt,
     breaklines=true,
     showstringspaces=false,
     frame=single,
-    tabsize=4
+    tabsize=4,
+}
+
+\lstset{
+  language=[Sharp]C,
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  literate=
+    {ą}{{\k{a}}}1
+    {Ą}{{\k{A}}}1
+    {ć}{{\'{c}}}1
+    {Ć}{{\'{C}}}1
+    {ę}{{\k{e}}}1
+    {Ę}{{\k{E}}}1
+    {ł}{{\l{}}}1      % or {\l}
+    {Ł}{{\L{}}}1
+    {ń}{{\'{n}}}1
+    {Ń}{{\'{N}}}1
+    {ó}{{\'{o}}}1
+    {Ó}{{\'{O}}}1
+    {ś}{{\'{s}}}1
+    {Ś}{{\'{S}}}1
+    {ź}{{\'{z}}}1
+    {Ź}{{\'{Z}}}1
+    {ż}{{\.{z}}}1
+    {Ż}{{\.{Z}}}1,
 }
 
 \title{Organizacja Systemów Komputerowych - Laboratorium 1.}
@@ -34,14 +61,26 @@
 Utworzono kalkulator z zegarem. Kalkulator rozwiązuje wpisywane równania wprowadzane za pomocą przycisków w okienku programu. Zaimplementowano dwa style zegarów -- analogowy i cyfrowy.
 Program zrealizowano za pomocą WindowsForms w języku C\#. Program można uruchomić tylko na komputerach z systemem operacyjnym Windows.
 \begin{figure}[h]
-    \label{fig:default_look}
+  \centering
+  \begin{minipage}{0.4\linewidth}
     \centering
-    \includegraphics[width=0.5\linewidth]{"./default_look.jpg"}
-    \caption{Domyślny wygląd programu}
+    \includegraphics[width=\linewidth]{default_look.jpg}
+    \captionof{figure}{Domyślny wygląd programu}
+    \label{fig:image1}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}{0.4\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{darkmode.jpg}
+    \captionof{figure}{Program z włączonym motywem ciemnym i zegarem cyfrowym}
+    \label{fig:image2}
+  \end{minipage}
+  \caption{Personalizowanie programu}
+  \label{fig:two-images}
 \end{figure}
 
 \section{Metody implementacji}
-Obliczanie równania wprowadzonego do kalkulatora realizowane jest poprzez konwersje równania z postaci infiksowej na odwrotną notację polską. Tak przetworzone równanie jest następnie rozwiązywane, a wynik obliczeń wyświetlany jest w oknie w którym wprowadzano równanie. 
+Obliczanie równania wprowadzonego do kalkulatora realizowane jest poprzez konwersje równania z postaci infiksowej na odwrotną notację polską. Postąpiono tak w celu umożliwienia realizacji rozwiązywania wielooperatorowych równań.
 \begin{figure}
 \begin{lstlisting}[style=csharp]
 private string Convert_To_RPN(object sender, EventArgs e)
@@ -49,68 +88,125 @@ private string Convert_To_RPN(object sender, EventArgs e)
     Label label = sender as Label;
     Stack<char> stack = new Stack<char>();
     string expression = label.Text;
-    string output = null;
+    List<string> output = new List<string>();
+    StringBuilder number = new StringBuilder();
 
     for (int i = 0; i < expression.Length; i++)
     {
         char c = expression[i];
+
         if (char.IsDigit(c) || c == ',')
         {
-            if (c == ',')
-            {
-                output += ',';
-            } else
-            output += c;
+            number.Append(c);
         }
-        else if (c == '+' || c == '-' || c == '*' || c == '/')
+        else
         {
-            output += ' ';
-            while(stack.Count() > 0 && (stack.Peek() == '*' || stack.Peek() == '/'))
+            if (number.Length > 0)
             {
-                output += " " + stack.Pop() + " ";
+                output.Add(number.ToString());
+                number.Clear();
             }
-            stack.Push(c);
-        }
-        else if (c == '(')
-        {
-            stack.Push(c);
-        }
-        else if (c == ')')
-        {
-            while(stack.Peek() != '(')
-            {
-                output += " " + stack.Pop() + " ";
-            }
-            if(!(stack.Count() > 0))
-            {
-                MessageBox.Show("Nie ma zamykajacego nawiasu!");
-                this.valid_RPN = false;
-            }
-            else
-            {
-                stack.Pop();
-                this.valid_RPN = true;
-            }
-        }
-    }
 
-    while (stack.Count > 0)
-    {
-        output += " " + stack.Pop();
+            if (c == '+' || c == '-' || c == '*' || c == '/')
+            {
+                while (stack.Count > 0 && stack.Peek() != '(' &&
+                        GetPrecedence(stack.Peek()) >= GetPrecedence(c))
+                {
+                    output.Add(stack.Pop().ToString());
+                }
+                stack.Push(c);
+            }
+            else if (c == '(')
+            {
+                stack.Push(c);
+            }
+            else if (c == ')')
+            {
+                while (stack.Count > 0 && stack.Peek() != '(')
+                {
+                    output.Add(stack.Pop().ToString());
+                }
+                if (stack.Count == 0)
+                {
+                    MessageBox.Show("Brakujący nawias otwierający!");
+                    this.valid_RPN = false;
+                    return "";
+                }
+                stack.Pop();
+            }
+            else if (c != ' ')
+            {
+                MessageBox.Show($"Nieznany znak: {c}");
+                this.valid_RPN = false;
+                return "";
+            }
+        }
     }
-    return output;
-}
 \end{lstlisting}
-\caption{Realizacja konwersji z zapisu infiksowego do odwrotnej notacji polskiej}
+\caption{Realizacja konwersji z zapisu infiksowego do odwrotnej notacji polskiej (ONP)}
+\end{figure}
+Tak przetworzone równanie jest następnie rozwiązywane, a wynik obliczeń wyświetlany jest w oknie w którym wprowadzano równanie. 
+\begin{figure}
+    \begin{lstlisting}[style=csharp]
+private float Solve_RPN(string rpn)
+{
+    float result = 0;
+    Stack<float> stack = new Stack<float>();
+    string number = null;
+    if (rpn == null) return 0;
+    for (int i = 0; i < rpn.Length; i++)
+    {
+        char c = rpn[i];
+        if (char.IsDigit(c) || c == ',')
+        {
+            number += c;
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(number))
+            {
+                stack.Push(float.Parse(number));
+                number = null;
+            }
+            if ((c == '+' || c == '-' || c == '*' || c == '/') & stack.Count > 0)
+            {
+                float a = stack.Pop();
+                float b = stack.Pop();
+                switch (c)
+                {
+                    case '+':
+                        result = b + a;
+                        break;
+                    case '-':
+                        result = b - a;
+                        break;
+                    case '*':
+                        result = b * a;
+                        break;
+                    case '/':
+                        result = b / a;
+                        break;
+                }
+                stack.Push(result);
+            }
+        }
+    }
+    if (stack.Count > 0) return stack.Pop();
+    else return float.Parse(number);
+}      
+    \end{lstlisting}
+    \caption{Realizacja rozwiązania równania w postaci ONP}
 \end{figure}
 
-Zegar analogowy posiada trzy wskazówski wskazujące na godzinę, minutę i sekundę aktualnego czasu oraz znaczniki pomagające odczytać dokładną godzinę. Zegar cyfrowy składa się z czterech siedmiosegmentowych wyświetlaczy wyświetlających godzinę i minutę. Pomiędzy wyświetlaczami znajduje się dwukropek pulsujący co sekundę.
+Wprowadzanie informacji do kalkulatora obsługiwane jest poprzez przyciski widoczne pod zegarem. Widnieją tam przyciski do wprowadzenia cyfr, przecinka, operacji dodawania, odejmowania, mnożenia, dzielenia i nawiasów. Istnieje również przycisk "C", który usuwa zawartość okna wejściowego. Zaimplementowano również wsparcie klawiatury, gdzie po za obsługą wciskania klawiszy odpowiadającym przyciskom pokazanym na ekranie, klawisz Enter również pełni funkcję znaku "=", a klawisz Backspace umożliwia usuwanie znaków jeden po jednym z okna wejściowego.
 
-Za pomocą obiektu \emph{Timer} zapisywano informacje dotyczące aktualnego czasu, które następne wykorzystano do określenia punktów początku i końca liń reprezentujących wskazówki.
+Zegar analogowy posiada trzy wskazówski wskazujące na godzinę, minutę i sekundę aktualnego czasu oraz znaczniki pomagające odczytać dokładną godzinę. Zegar rysowany jest poprzez wyznaczanie kąta obrotu poszczególnych wskazówek dla aktualnie zmierzonego czasu. Zegar cyfrowy składa się z czterech siedmiosegmentowych wyświetlaczy wyświetlających godzinę i minutę. Każdy segment danego wyświetlacza posiada dwa stany: włączony i wyłączony. Na podstawie aktualnego czasu zapalane są dane segmenty wedle zapisanych trwale kombinacji. Pomiędzy wyświetlaczami znajduje się dwukropek pulsujący co sekundę. 
 
-W celu umożliwienia użytkownikowi zmiany wyglądu programu oraz typu zegara zaimplementowano menu, w którym znajdują się odpowiednie opcje. Zaimplementowano motywy: domyślny, ciemny i zielony.
+Aktualny czas uzyskiwano za pomocą obiektu \emph{Timer}.
+
+W celu umożliwienia użytkownikowi zmiany wyglądu programu oraz typu zegara zaimplementowano menu, w którym znajdują się odpowiednie opcje. Zaimplementowano motywy: domyślny, ciemny i zielony oraz wcześniej opisane style zegarów analogowy i cyfrowy.
 
 \section{Podsumowanie}
-Program realizuje zamierzone mu zadania. Metoda implementacji kolorystyki okna pozwala na proste dodanie kolejnych styli w razie potrzeby. Największą wadą jest brak wsparcia dla klawiatury, jednakże jest to funkcja która nie uniemożliwia korzystania z programu.
+Program realizuje zamierzone mu zadania. Metoda implementacji kolorystyki okna pozwala na proste dodanie kolejnych styli w celu zwiększenia możliwości personalizacji dla użytkownika.
 
 \end{document}

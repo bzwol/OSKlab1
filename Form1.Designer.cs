@@ -493,7 +493,7 @@ namespace WindowsFormsApp1
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Kalkulator i zegar";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.button_KeyPress);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

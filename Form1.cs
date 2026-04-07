@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -160,9 +160,9 @@ namespace WindowsFormsApp1
                             this.valid_RPN = false;
                             return "";
                         }
-                        stack.Pop(); // usuń '('
+                        stack.Pop();
                     }
-                    else if (c != ' ') // ignoruj spacje
+                    else if (c != ' ')
                     {
                         MessageBox.Show($"Nieznany znak: {c}");
                         this.valid_RPN = false;
@@ -171,13 +171,11 @@ namespace WindowsFormsApp1
                 }
             }
 
-            // Dodaj ostatnią liczbę
             if (number.Length > 0)
             {
                 output.Add(number.ToString());
             }
 
-            // Dodaj pozostałe operatory ze stosu
             while (stack.Count > 0)
             {
                 if (stack.Peek() == '(')

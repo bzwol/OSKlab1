@@ -73,14 +73,12 @@ namespace WindowsFormsApp1
         {
             string currentText = label_disp.Text;
 
-            // Jeśli pole jest puste, zacznij od "0,"
             if (string.IsNullOrEmpty(currentText))
             {
                 label_disp.Text = "0,";
                 return;
             }
 
-            // Znajdź ostatni operator lub początek
             int lastOperatorIndex = -1;
             for (int i = currentText.Length - 1; i >= 0; i--)
             {
@@ -91,16 +89,11 @@ namespace WindowsFormsApp1
                     break;
                 }
             }
-
-            // Pobierz ostatnią liczbę
-            string lastNumber = lastOperatorIndex == -1
-                ? currentText
-                : currentText.Substring(lastOperatorIndex + 1);
-
-            // Sprawdź czy można dodać przecinek
-            if (!lastNumber.Contains(","))
-            {
-                // Jeśli ostatnia liczba jest pusta, dodaj "0,"
+ 
+            string lastNumber = (lastOperatorIndex == -1) ? currentText : currentText.Substring(lastOperatorIndex + 1);
+            
+            if (!lastNumber.Contains(",")) { 
+            
                 if (string.IsNullOrEmpty(lastNumber))
                 {
                     label_disp.Text += "0,";

@@ -444,7 +444,7 @@ namespace WindowsFormsApp1
             // analogClock1
             // 
             this.analogClock1.detail_color = System.Drawing.Color.Black;
-            this.analogClock1.Location = new System.Drawing.Point(28, 27);
+            this.analogClock1.Location = new System.Drawing.Point(38, 27);
             this.analogClock1.main_color = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.analogClock1.Name = "analogClock1";
             this.analogClock1.Size = new System.Drawing.Size(250, 250);
@@ -490,8 +490,11 @@ namespace WindowsFormsApp1
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
             this.Text = "Kalkulator i zegar";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.button_KeyPress);

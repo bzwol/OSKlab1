@@ -60,27 +60,18 @@
 \section{Opis realizowanego zadania}
 Utworzono kalkulator z zegarem. Kalkulator rozwiązuje wpisywane równania wprowadzane za pomocą przycisków w okienku programu. Zaimplementowano dwa style zegarów -- analogowy i cyfrowy.
 Program zrealizowano za pomocą WindowsForms w języku C\#. Program można uruchomić tylko na komputerach z systemem operacyjnym Windows.
+
 \begin{figure}[h]
-  \centering
-  \begin{minipage}{0.4\linewidth}
     \centering
-    \includegraphics[width=\linewidth]{default_look.jpg}
-    \captionof{figure}{Domyślny wygląd programu}
+    \includegraphics[width=0.3\linewidth]{default_look.jpg}
+    \caption{Domyślny wygląd programu}
     \label{fig:image1}
-  \end{minipage}%
-  \hfill
-  \begin{minipage}{0.4\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{darkmode.jpg}
-    \captionof{figure}{Program z włączonym motywem ciemnym i zegarem cyfrowym}
-    \label{fig:image2}
-  \end{minipage}
-  \caption{Personalizowanie programu}
-  \label{fig:two-images}
 \end{figure}
 
 \section{Metody implementacji}
-Obliczanie równania wprowadzonego do kalkulatora realizowane jest poprzez konwersje równania z postaci infiksowej na odwrotną notację polską. Postąpiono tak w celu umożliwienia realizacji rozwiązywania wielooperatorowych równań.
+\subsection{Kalkulator}
+Obliczanie równania wprowadzonego do kalkulatora realizowane jest poprzez konwersje równania z postaci infiksowej na odwrotną notację polską, i następne rozwiązanie równania zapisanego w takiej postaci. Postąpiono tak w celu umożliwienia realizacji rozwiązywania wielooperatorowych równań.
+
 \begin{figure}
 \begin{lstlisting}[style=csharp]
 private string Convert_To_RPN(object sender, EventArgs e)
@@ -145,6 +136,7 @@ private string Convert_To_RPN(object sender, EventArgs e)
 \end{lstlisting}
 \caption{Realizacja konwersji z zapisu infiksowego do odwrotnej notacji polskiej (ONP)}
 \end{figure}
+Algorytm konwersji zapisu równania polega na zapisywaniu operatorów na stosie, z którego są następnie zdejmowane wedle kolejności wykonywania działań i występujących liczb w równaniu.
 Tak przetworzone równanie jest następnie rozwiązywane, a wynik obliczeń wyświetlany jest w oknie w którym wprowadzano równanie. 
 \begin{figure}
     \begin{lstlisting}[style=csharp]
@@ -197,16 +189,30 @@ private float Solve_RPN(string rpn)
     \end{lstlisting}
     \caption{Realizacja rozwiązania równania w postaci ONP}
 \end{figure}
-
+\subsection{Interfejs}
 Wprowadzanie informacji do kalkulatora obsługiwane jest poprzez przyciski widoczne pod zegarem. Widnieją tam przyciski do wprowadzenia cyfr, przecinka, operacji dodawania, odejmowania, mnożenia, dzielenia i nawiasów. Istnieje również przycisk "C", który usuwa zawartość okna wejściowego. Zaimplementowano również wsparcie klawiatury, gdzie po za obsługą wciskania klawiszy odpowiadającym przyciskom pokazanym na ekranie, klawisz Enter również pełni funkcję znaku "=", a klawisz Backspace umożliwia usuwanie znaków jeden po jednym z okna wejściowego.
 
+\subsection{Zegary}
 Zegar analogowy posiada trzy wskazówski wskazujące na godzinę, minutę i sekundę aktualnego czasu oraz znaczniki pomagające odczytać dokładną godzinę. Zegar rysowany jest poprzez wyznaczanie kąta obrotu poszczególnych wskazówek dla aktualnie zmierzonego czasu. Zegar cyfrowy składa się z czterech siedmiosegmentowych wyświetlaczy wyświetlających godzinę i minutę. Każdy segment danego wyświetlacza posiada dwa stany: włączony i wyłączony. Na podstawie aktualnego czasu zapalane są dane segmenty wedle zapisanych trwale kombinacji. Pomiędzy wyświetlaczami znajduje się dwukropek pulsujący co sekundę. 
 
 Aktualny czas uzyskiwano za pomocą obiektu \emph{Timer}.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\linewidth]{zestawienie_personalizacji.png}
+    \caption{Zestawienie wszystkich dostępnych motywów i zegarów}
+\end{figure}
+
 W celu umożliwienia użytkownikowi zmiany wyglądu programu oraz typu zegara zaimplementowano menu, w którym znajdują się odpowiednie opcje. Zaimplementowano motywy: domyślny, ciemny i zielony oraz wcześniej opisane style zegarów analogowy i cyfrowy.
 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\linewidth]{menu.png}
+    \caption{Menu wyboru motywu}
+\end{figure}
+
 \section{Podsumowanie}
-Program realizuje zamierzone mu zadania. Metoda implementacji kolorystyki okna pozwala na proste dodanie kolejnych styli w celu zwiększenia możliwości personalizacji dla użytkownika.
+Program realizuje zamierzone mu zadania. Metoda implementacji kolorystyki okna pozwala na proste dodanie kolejnych styli w celu zwiększenia możliwości personalizacji dla użytkownika. Najbardziej znaczącą wadą programu to brak operatorów matematycznych takich jak pierwiastek, logarytm, potęga.  
 
 \end{document}

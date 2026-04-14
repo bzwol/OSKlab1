@@ -19,7 +19,18 @@ namespace WindowsFormsApp1
             this.analogClock1.Visible = true;
             this.digitalClock1.Visible = false;
             changeColors();
+        }
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Up ||
+                keyData == Keys.Down ||
+                keyData == Keys.Left ||
+                keyData == Keys.Right)
+            {
+                return true; // blocks focus navigation
+            }
 
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private void Button_Digit_Click(object sender, EventArgs e)
@@ -57,6 +68,10 @@ namespace WindowsFormsApp1
                 }
                 else
                     label_disp.Text += operatorSymbol;
+            }
+            else if (operatorSymbol == "-")
+            {
+                label_disp.Text += operatorSymbol;
             }
         }
 
@@ -104,7 +119,7 @@ namespace WindowsFormsApp1
                 }
             }
         }
-        private string Convert_To_RPN(object sender, EventArgs e)
+        private List<string> Convert_To_RPN(object sender, EventArgs e)
         {
             Label label = sender as Label;
             Stack<char> stack = new Stack<char>();
@@ -116,7 +131,7 @@ namespace WindowsFormsApp1
             {
                 char c = expression[i];
 
-                if (char.IsDigit(c) || c == ',')
+                if (char.IsDigit(c) || c == ',' || (c == '-'  & number.Length == 0))
                 {
                     number.Append(c);
                 }
@@ -130,8 +145,7 @@ namespace WindowsFormsApp1
 
                     if (c == '+' || c == '-' || c == '*' || c == '/')
                     {
-                        while (stack.Count > 0 && stack.Peek() != '(' &&
-                               GetPrecedence(stack.Peek()) >= GetPrecedence(c))
+                        while (stack.Count > 0 && stack.Peek() != '(' && GetPrecedence(stack.Peek()) >= GetPrecedence(c))
                         {
                             output.Add(stack.Pop().ToString());
                         }
@@ -143,23 +157,27 @@ namespace WindowsFormsApp1
                     }
                     else if (c == ')')
                     {
-                        while (stack.Count > 0 && stack.Peek() != '(')
+                        try
                         {
-                            output.Add(stack.Pop().ToString());
+                            while (stack.Count > 0 && stack.Peek() != '(')
+                            {
+                                output.Add(stack.Pop().ToString());
+                            }
+
+                            stack.Pop();
                         }
-                        if (stack.Count == 0)
+                        catch
                         {
                             MessageBox.Show("Brakujący nawias otwierający!");
                             this.valid_RPN = false;
-                            return "";
+                            return null;
                         }
-                        stack.Pop();
                     }
                     else if (c != ' ')
                     {
                         MessageBox.Show($"Nieznany znak: {c}");
                         this.valid_RPN = false;
-                        return "";
+                        return null;
                     }
                 }
             }
@@ -173,15 +191,14 @@ namespace WindowsFormsApp1
             {
                 if (stack.Peek() == '(')
                 {
-                    MessageBox.Show("Nadmiarowy nawias otwierający!");
                     this.valid_RPN = false;
-                    return "";
+                    return null;
                 }
                 output.Add(stack.Pop().ToString());
             }
 
             this.valid_RPN = true;
-            return string.Join(" ", output);
+            return output;
         }
 
         private int GetPrecedence(char op)
@@ -198,48 +215,47 @@ namespace WindowsFormsApp1
                     return 0;
             }
         }
-        private float Solve_RPN(string rpn)
+
+        private float Solve_RPN(List<string> rpn)
         {
             float result = 0;
             Stack<float> stack = new Stack<float>();
             string number = null;
             if (rpn == null) return 0;
-            for (int i = 0; i < rpn.Length; i++)
+            for (int i = 0; i < rpn.Count; i++)
             {
-                char c = rpn[i];
-                if (char.IsDigit(c) || c == ',')
+                string element = rpn[i];
+                if (float.TryParse(element,out _))
                 {
-                    number += c;
+                    number = element;
                 }
-                else
+                if (!string.IsNullOrEmpty(number))
                 {
-                    if (!string.IsNullOrEmpty(number))
-                    {
-                        stack.Push(float.Parse(number));
-                        number = null;
-                    }
-                    if ((c == '+' || c == '-' || c == '*' || c == '/') & stack.Count > 0)
-                    {
-                        float a = stack.Pop();
-                        float b = stack.Pop();
-                        switch (c)
-                        {
-                            case '+':
-                                result = b + a;
-                                break;
-                            case '-':
-                                result = b - a;
-                                break;
-                            case '*':
-                                result = b * a;
-                                break;
-                            case '/':
-                                result = b / a;
-                                break;
-                        }
-                        stack.Push(result);
-                    }
+                    stack.Push(float.Parse(number.Replace(',','.')));
+                    number = null;
                 }
+                if ((element == "+" || element == "-" || element == "*" || element == "/") & stack.Count > 0)
+                {
+                    float a = stack.Pop();
+                    float b = stack.Pop();
+                    switch (element)
+                    {
+                        case "+":
+                            result = b + a;
+                            break;
+                        case "-":
+                            result = b - a;
+                            break;
+                        case "*":
+                            result = b * a;
+                            break;
+                        case "/":
+                            result = b / a;
+                            break;
+                    }
+                    stack.Push(result);
+                }
+                
             }
             if (stack.Count > 0) return stack.Pop();
             else return float.Parse(number);
@@ -247,10 +263,17 @@ namespace WindowsFormsApp1
 
         private void button_eq_Click(object sender, EventArgs e)
         {
-            string rpn = Convert_To_RPN(label_disp, e);
-            float result = Solve_RPN(rpn);
-            label_disp.Text = result.ToString();
-            newResult = true;
+            List<string> rpn = Convert_To_RPN(label_disp, e);
+            if (this.valid_RPN)
+            {
+                float result = Solve_RPN(rpn);
+                label_disp.Text = result.ToString("0." + new string('#', 339)).Replace('.',',');
+                newResult = true;
+            }
+            else
+            {
+                MessageBox.Show("Wystąpił błąd przy przetwarzaniu równania! Upewnij się, że wprowadziłaś/eś równanie poprawnie.");
+            }
         }
 
         private void button_clear_Click(object sender, EventArgs e)
@@ -423,8 +446,12 @@ namespace WindowsFormsApp1
                     }
                 case (char)Keys.Back:
                     {
-                        if(this.label_disp.Text.Length > 0) this.label_disp.Text = this.label_disp.Text.Remove(this.label_disp.Text.Length - 1);
-                        return;
+                        if (this.label_disp.Text.Length > 0) 
+                        {
+                            this.label_disp.Text = this.label_disp.Text.Remove(this.label_disp.Text.Length - 1);
+                            this.newResult = false;
+                        }
+                            return;
                     }
                 case '=':
                 case (char)Keys.Enter:        
@@ -452,9 +479,19 @@ namespace WindowsFormsApp1
                         this.button_rbracket.PerformClick();
                         return;
                     }
+                case 'c':
+                    {
+                        this.button_clear.PerformClick();
+                        return;
+                    }
                 default:
                     break;
             }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+
         }
     }
 }

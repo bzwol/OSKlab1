@@ -131,10 +131,7 @@ namespace WindowsFormsApp1
             {
                 char c = expression[i];
 
-                if (char.IsDigit(c) || c == ',' || (c == '-'  & number.Length == 0))
-                {
-                    number.Append(c);
-                }
+                if (char.IsDigit(c) || c == ',' || (c == '-'  & number.Length == 0)) number.Append(c);
                 else
                 {
                     if (number.Length > 0)
@@ -151,10 +148,7 @@ namespace WindowsFormsApp1
                         }
                         stack.Push(c);
                     }
-                    else if (c == '(')
-                    {
-                        stack.Push(c);
-                    }
+                    else if (c == '(') stack.Push(c);
                     else if (c == ')')
                     {
                         try
@@ -168,25 +162,20 @@ namespace WindowsFormsApp1
                         }
                         catch
                         {
-                            MessageBox.Show("Brakujący nawias otwierający!");
                             this.valid_RPN = false;
                             return null;
                         }
                     }
                     else if (c != ' ')
                     {
-                        MessageBox.Show($"Nieznany znak: {c}");
                         this.valid_RPN = false;
                         return null;
                     }
                 }
             }
 
-            if (number.Length > 0)
-            {
-                output.Add(number.ToString());
-            }
-
+            if (number.Length > 0) output.Add(number.ToString());
+            
             while (stack.Count > 0)
             {
                 if (stack.Peek() == '(')
@@ -200,7 +189,6 @@ namespace WindowsFormsApp1
             this.valid_RPN = true;
             return output;
         }
-
         private int GetPrecedence(char op)
         {
             switch (op)
